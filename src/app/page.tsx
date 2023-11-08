@@ -1,65 +1,68 @@
-import Link from "next/link";
-
-import { CreatePost } from "~/app/_components/create-post";
-import { api } from "~/trpc/server";
-
-export default async function Home() {
-  const hello = await api.post.hello.query({ text: "from tRPC" });
+const products = [
+  {
+    id: 1,
+    name: "Leather Long Wallet",
+    color: "Natural",
+    price: "$75",
+    href: "#",
+    imageSrc:
+      "https://tailwindui.com/img/ecommerce-images/home-page-04-trending-product-02.jpg",
+    imageAlt: "Hand stitched, orange leather long wallet.",
+  },
+];
+export default function Home() {
+  // Add server function
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-          Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-        </h1>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-            href="https://create.t3.gg/en/usage/first-steps"
-            target="_blank"
+    <div className="bg-white">
+      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+        <div className="md:flex md:items-center md:justify-between">
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+            Trending products
+          </h2>
+          <a
+            href="#"
+            className="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block"
           >
-            <h3 className="text-2xl font-bold">First Steps →</h3>
-            <div className="text-lg">
-              Just the basics - Everything you need to know to set up your
-              database and authentication.
-            </div>
-          </Link>
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-            href="https://create.t3.gg/en/introduction"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">Documentation →</h3>
-            <div className="text-lg">
-              Learn more about Create T3 App, the libraries it uses, and how to
-              deploy it.
-            </div>
-          </Link>
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <p className="text-2xl text-white">
-            {hello ? hello.greeting : "Loading tRPC query..."}
-          </p>
+            Shop the collection
+            <span aria-hidden="true"> &rarr;</span>
+          </a>
         </div>
 
-        <CrudShowcase />
+        <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-0 lg:gap-x-8">
+          {products.map((product) => (
+            <div key={product.id} className="group relative">
+              <div className="h-56 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-72 xl:h-80">
+                <img
+                  src={product.imageSrc}
+                  alt={product.imageAlt}
+                  className="h-full w-full object-cover object-center"
+                />
+              </div>
+              <h3 className="mt-4 text-sm text-gray-700">
+                <a href={product.href}>
+                  <span className="absolute inset-0" />
+                  {product.name}
+                </a>
+              </h3>
+              <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+              <p className="mt-1 text-sm font-medium text-gray-900">
+                {product.price}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 text-sm md:hidden">
+          <a
+            href="#"
+            className="font-medium text-indigo-600 hover:text-indigo-500"
+          >
+            Shop the collection
+            <span aria-hidden="true"> &rarr;</span>
+          </a>
+        </div>
       </div>
-    </main>
-  );
-}
-
-async function CrudShowcase() {
-  const latestPost = await api.post.getLatest.query();
-
-  return (
-    <div className="w-full max-w-xs">
-      {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.name}</p>
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
-
-      <CreatePost />
     </div>
   );
 }

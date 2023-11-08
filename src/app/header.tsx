@@ -366,7 +366,7 @@ export default function Header() {
               </div>
 
               {/* Flyout menus */}
-              <Popover.Group className="hidden lg:block lg:flex-1 lg:self-stretch">
+              <Popover.Group className="hidden lg:block lg:flex-1 lg:self-stretch z-40">
                 <div className="flex h-full space-x-8">
                   {navigation.categories.map((category) => (
                     <Popover key={category.name} className="flex">
