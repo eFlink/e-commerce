@@ -1,8 +1,15 @@
+import { redirect } from "next/navigation";
 import { UploadProduct } from "../_components/upload-product";
+import { api } from "~/trpc/server";
 
-export default function Home() {
+export default async function Home() {
     // Product Uploading
     // Name, Description, Brand, Price
+    const isAdmin = await api.user.isAdmin.query();
+    if (!isAdmin) {
+        redirect("/");
+    }
+
     return (
         <div>
             <h1 className="">Product Upload</h1>

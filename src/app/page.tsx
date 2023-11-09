@@ -1,18 +1,6 @@
 import { api } from "~/trpc/server";
 import { UploadProduct } from "./_components/upload-product";
 
-const products = [
-  {
-    id: 1,
-    name: "Leather Long Wallet",
-    color: "Natural",
-    price: "$75",
-    href: "#",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/home-page-04-trending-product-02.jpg",
-    imageAlt: "Hand stitched, orange leather long wallet.",
-  },
-];
 export default async function Home() {
   // Add server function
   const products = await api.product.getLatest.query();
