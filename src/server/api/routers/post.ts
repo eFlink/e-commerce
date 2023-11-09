@@ -7,7 +7,7 @@ export const postRouter = createTRPCRouter({
   hello: publicProcedure
     .query(({ ctx }) => {
       return {
-        greeting: `Hello ${ctx.user.userId}`,
+        greeting: `Hello ${ctx.currentUser.userId}`,
       };
     }),
 

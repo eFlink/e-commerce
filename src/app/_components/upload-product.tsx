@@ -5,14 +5,17 @@ import { useState } from "react";
 
 import { api } from "~/trpc/react";
 
-export function CreatePost() {
+export function UploadProduct() {
   const router = useRouter();
   const [name, setName] = useState("");
+  const [description, setDesc] = useState("");
 
-  const createPost = api.post.create.useMutation({
+
+  const uploadProduct = api.product.add.useMutation({
     onSuccess: () => {
       router.refresh();
       setName("");
+      setDesc("");
     },
   });
 
@@ -20,7 +23,7 @@ export function CreatePost() {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        createPost.mutate({ name });
+        uploadProduct.mutate({ name, description });
       }}
       className="flex flex-col gap-2"
     >
@@ -31,12 +34,19 @@ export function CreatePost() {
         onChange={(e) => setName(e.target.value)}
         className="w-full rounded-full px-4 py-2 text-black"
       />
+      <input
+        type="text"
+        placeholder="Description"
+        value={description}
+        onChange={(e) => setDesc(e.target.value)}
+        className="w-full rounded-full px-4 py-2 text-black"
+      />
       <button
         type="submit"
         className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-        disabled={createPost.isLoading}
+        disabled={uploadProduct.isLoading}
       >
-        {createPost.isLoading ? "Submitting..." : "Submit"}
+        {uploadProduct.isLoading ? "Submitting..." : "Submit"}
       </button>
     </form>
   );

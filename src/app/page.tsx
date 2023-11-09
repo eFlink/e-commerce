@@ -1,28 +1,31 @@
 import { api } from "~/trpc/server";
+import { UploadProduct } from "./_components/upload-product";
 
-// const products = [
-//   {
-//     id: 1,
-//     name: "Leather Long Wallet",
-//     color: "Natural",
-//     price: "$75",
-//     href: "#",
-//     imageSrc:
-//       "https://tailwindui.com/img/ecommerce-images/home-page-04-trending-product-02.jpg",
-//     imageAlt: "Hand stitched, orange leather long wallet.",
-//   },
-// ];
+const products = [
+  {
+    id: 1,
+    name: "Leather Long Wallet",
+    color: "Natural",
+    price: "$75",
+    href: "#",
+    imageSrc:
+      "https://tailwindui.com/img/ecommerce-images/home-page-04-trending-product-02.jpg",
+    imageAlt: "Hand stitched, orange leather long wallet.",
+  },
+];
 export default async function Home() {
   // Add server function
   const products = await api.product.getLatest.query();
-  const hello = await api.post.hello.query();
+  // const hello = await api.post.hello.query();
 
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <div className="md:flex md:items-center md:justify-between">
           <h2 className="text-2xl font-bold tracking-tight text-gray-900">
-            Trending products for {hello.greeting}
+            {/* Trending products for {hello.greeting} */}
+            Trending Products
+            <UploadProduct/>
             
           </h2>
           <a

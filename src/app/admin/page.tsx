@@ -1,4 +1,4 @@
-
+import { UploadProduct } from "../_components/upload-product";
 
 export default function Home() {
     // Product Uploading
@@ -6,6 +6,7 @@ export default function Home() {
     return (
         <div>
             <h1 className="">Product Upload</h1>
+            <UploadProduct/>
         </div>
     )
 }

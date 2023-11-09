@@ -6,7 +6,7 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { initTRPC } from "@trpc/server";
+import { TRPCError, initTRPC } from "@trpc/server";
 import { type NextRequest } from "next/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
@@ -14,6 +14,7 @@ import { ZodError } from "zod";
 import { db } from "~/server/db";
 
 import { getAuth } from '@clerk/nextjs/server';
+import { clerkClient } from "@clerk/nextjs";
 
 /**
  * 1. CONTEXT
@@ -58,7 +59,7 @@ export const createTRPCContext = (opts: { req: NextRequest }) => {
 
   return {...createInnerTRPCContext({
     headers: opts.req.headers,
-  }), user};
+  }), currentUser: user};
   // return {
   //   header: opts.req.headers,
   //   db,
@@ -109,3 +110,44 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+
+/**
+ * User (authenticated) procedure
+ */
+const enforceUserIsAuthed = t.middleware(async ({ctx, next}) => {
+  if (!ctx.currentUser) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+    })
+  }
+  return next({
+    ctx: {
+      currentUser: ctx.currentUser,
+    }
+  });
+});
+export const userProcedure = t.procedure.use(enforceUserIsAuthed);
+
+/**
+ * Admin procedure
+ */
+const enforceUserIsAdmin = t.middleware(async ({ctx, next}) => {
+  if (!ctx.currentUser || !ctx.currentUser.userId) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+    });
+  } 
+  const user = await clerkClient.users.getUser(ctx.currentUser.userId);
+  console.log(user.privateMetadata.role);
+  if (user.privateMetadata.role !== "admin") {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+    });
+  }
+  return next({
+    ctx: {
+      currentUser: ctx.currentUser,
+    }
+  });
+});
+export const adminProcedure = t.procedure.use(enforceUserIsAdmin);
