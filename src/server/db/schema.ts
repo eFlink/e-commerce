@@ -39,7 +39,7 @@ export const products = mysqlTable(
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
     name: varchar("name", { length: 256 }).notNull(),
     description: varchar("description", { length: 256 }).notNull(),
-    image_url: varchar("image_url", { length: 256 }).notNull(),
+    // image_url: varchar("image_url", { length: 256 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -52,15 +52,15 @@ export const products = mysqlTable(
 
 // export const productsRelations = relations(products, { many })
 
-export const product_images = mysqlTable(
-  "product_image",
-  {
-    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    product_id: bigint("product_id", { mode: "number" }).notNull(),
-    alt_text: varchar("alt_text", { length: 256 }),
-    createdAt: timestamp("created_at")
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt").onUpdateNow(),
-  }
-);
+// export const product_images = mysqlTable(
+//   "product_image",
+//   {
+//     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+//     product_id: bigint("product_id", { mode: "number" }).notNull(),
+//     alt_text: varchar("alt_text", { length: 256 }),
+//     createdAt: timestamp("created_at")
+//       .default(sql`CURRENT_TIMESTAMP`)
+//       .notNull(),
+//     updatedAt: timestamp("updatedAt").onUpdateNow(),
+//   }
+// );

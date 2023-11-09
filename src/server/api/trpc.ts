@@ -13,6 +13,8 @@ import { ZodError } from "zod";
 
 import { db } from "~/server/db";
 
+import { getAuth } from '@clerk/nextjs/server';
+
 /**
  * 1. CONTEXT
  *
@@ -36,6 +38,7 @@ interface CreateContextOptions {
  * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
  */
 export const createInnerTRPCContext = (opts: CreateContextOptions) => {
+  
   return {
     headers: opts.headers,
     db,
@@ -50,10 +53,16 @@ export const createInnerTRPCContext = (opts: CreateContextOptions) => {
  */
 export const createTRPCContext = (opts: { req: NextRequest }) => {
   // Fetch stuff that depends on the request
+  const sesh = getAuth(opts.req);
+  const user = sesh;
 
-  return createInnerTRPCContext({
+  return {...createInnerTRPCContext({
     headers: opts.req.headers,
-  });
+  }), user};
+  // return {
+  //   header: opts.req.headers,
+  //   db,
+  // }
 };
 
 /**
