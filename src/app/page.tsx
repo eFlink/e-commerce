@@ -36,7 +36,7 @@ export default async function Home() {
 
         <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-0 lg:gap-x-8">
           {products.map((product) => (
-            <h2>{product.name}</h2>
+            <h2 key={product.id}>{product.name}</h2>
             // <div key={product.id} className="group relative">
             //   <div className="h-56 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-72 xl:h-80">
             //     <img
