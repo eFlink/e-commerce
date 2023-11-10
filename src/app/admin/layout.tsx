@@ -8,7 +8,9 @@ export default function AdminLayout({
 }) {
   return (
     <section className='h-full'>
-      <SideBar children={children}/>
+      <SideBar>
+        {children}
+      </SideBar>
     </section>
   );
 }
