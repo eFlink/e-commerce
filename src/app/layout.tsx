@@ -5,8 +5,8 @@ import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { ClerkProvider } from "@clerk/nextjs";
-import Header from "./header";
-import Footer from "./footer";
+import Header from "./_components/ui/header";
+import Footer from "./_components/ui/footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,9 +28,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className="min-h-screen">
         <body className={`font-sans ${inter.variable}`}>
-          <Header/>
           <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
-          <Footer/>
         </body>
       </html>
     </ClerkProvider>

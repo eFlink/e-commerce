@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { UploadProduct } from "../_components/form/upload-product";
 import { api } from "~/trpc/server";
 
 export default async function Home() {
@@ -12,7 +11,7 @@ export default async function Home() {
 
     return (
         <div>
-            <UploadProduct/>
+            <h1 className="">Product Upload</h1>
         </div>
     )
 }
