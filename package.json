@@ -11,6 +11,9 @@
     "start": "next start"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.445.0",
+    "@aws-sdk/s3-presigned-post": "^3.449.0",
+    "@aws-sdk/s3-request-presigner": "^3.445.0",
     "@clerk/nextjs": "^4.26.2",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
@@ -24,6 +27,7 @@
     "@trpc/react-query": "^10.37.1",
     "@trpc/server": "^10.37.1",
     "@vercel/blob": "^0.14.1",
+    "aws-cdk": "^2.106.1",
     "drizzle-orm": "^0.28.5",
     "next": "^13.5.4",
     "react": "18.2.0",

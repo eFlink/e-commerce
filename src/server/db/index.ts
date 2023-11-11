@@ -4,9 +4,13 @@ import { drizzle } from "drizzle-orm/planetscale-serverless";
 import { env } from "~/env.mjs";
 import * as schema from "./schema";
 
+import { S3Client } from "@aws-sdk/client-s3";
+
 export const db = drizzle(
   new Client({
     url: env.DATABASE_URL,
   }).connection(),
   { schema }
 );
+
+export const s3 = new S3Client();
