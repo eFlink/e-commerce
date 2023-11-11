@@ -6,8 +6,6 @@ import { api } from "~/trpc/react";
 
 
 export default function UploadImage() {
-  const router = useRouter();
-
   // Call Api
   const preSignedMutation = api.image.getPreSignedUrl.useMutation();
 
@@ -18,9 +16,6 @@ export default function UploadImage() {
       // Throw Error
       return;
     }
-    const fileName = encodeURIComponent(file.name);
-    // const fileType = encodeURIComponent(file.type);
-    // console.log(fileName);
 
     // Call Api
     const {url, fields} = await preSignedMutation.mutateAsync({
