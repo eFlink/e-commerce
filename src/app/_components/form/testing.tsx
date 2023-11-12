@@ -27,7 +27,8 @@ export default function Testing() {
 
   const preSignedMutation = api.image.getPreSignedUrl.useMutation();
 
-  const uploadImage = async (file: File) => {
+  const uploadImage = async (filePond: FilePondFile) => {
+    const file = filePond.file;
 
     if (!file) {
       // Throw Error
@@ -73,10 +74,7 @@ export default function Testing() {
         event.preventDefault();
         console.log(files.at(0)?.file)
         console.log(files.at(0))
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        files.forEach(async (value) => {
-          await uploadImage(value.file);
-        })
+        files.forEach((value) => void uploadImage(value))
         }}>
         <FilePond
           onupdatefiles={setFiles}
