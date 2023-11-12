@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { api } from "~/trpc/server";
 import MediaUploader from "../_components/form/upload-image";
 import Testing from "../_components/form/testing";
+import { UploadProduct } from "../_components/form/upload-product";
 
 export default async function Home() {
     // Product Uploading
@@ -15,8 +16,8 @@ export default async function Home() {
     return (
         <div>
             {/* <MediaUploader/> */}
-            {/* <UploadProduct/> */}
-            <Testing/>
+            <UploadProduct/>
+            {/* <Testing/> */}
         </div>
     )
 }

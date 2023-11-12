@@ -13,24 +13,15 @@ export const imageRouter = createTRPCRouter({
     .input(z.object({
             fileName: z.string().min(1),
             fileType: z.string().min(1),
+            productId: z.number().min(1)
     }))
     .mutation( async ({ ctx, input }) => {
         // Add image to product images
-        const newMedia = await ctx.db.insert(images).values({
-            name: input.fileName,
-        });
-        if (!newMedia) {
-            throw new TRPCError({
-                code: "INTERNAL_SERVER_ERROR",
-            })
-        }
         const imageId = randomUUID();
         const {url, fields } = await createPresignedPost(s3, {
             Bucket: process.env.S3_BUCKET_NAME!,
             Key: imageId,
             Fields: {
-                // acl: 'public-read',
-                // 'Content-Type': input.fileType,
                 key: imageId,
             },
             Expires: 600, // Seconds
@@ -39,6 +30,16 @@ export const imageRouter = createTRPCRouter({
                 ['content-length-range', 0, 1048576], // up to 1 MB
             ],
         });
-        return {url, fields};
+        const newMedia = await ctx.db.insert(images).values({
+            name: input.fileName,
+            productId: input.productId,
+            imageUrl: imageId,
+        });
+        if (!newMedia) {
+            throw new TRPCError({
+                code: "INTERNAL_SERVER_ERROR",
+            })
+        }
+        return {url, fields, imageId};
     }),
 });

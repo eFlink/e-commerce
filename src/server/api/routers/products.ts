@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { adminProcedure, createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { products } from "~/server/db/schema";
@@ -19,5 +20,7 @@ export const productRouter = createTRPCRouter({
             name: input.name,
             description: input.description,
         });
+        const product = await ctx.db.select().from(products).where(eq(products.name, input.name));
+        return product.at(0);
     }),
 });

@@ -10,6 +10,8 @@ import {
   varchar,
 } from "drizzle-orm/mysql-core";
 
+import { relations } from "drizzle-orm";
+
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
  * database instance for multiple projects.
@@ -35,7 +37,9 @@ export const products = mysqlTable(
   })
 );
 
-// export const productsRelations = relations(products, { many })
+export const productsRelations = relations(products, ({many}) => ({
+  images: many(images),
+}));
 
 export const images = mysqlTable(
   "image",
@@ -44,6 +48,8 @@ export const images = mysqlTable(
     // product_id: bigint("product_id", { mode: "number" }).notNull(),
     name: varchar("name", { length: 256 }).notNull(),
     alt_text: varchar("alt_text", { length: 256 }),
+    productId: bigint("productId", {mode: "number"}).notNull(),
+    imageUrl: varchar("imageUrl", { length: 256 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -53,3 +59,9 @@ export const images = mysqlTable(
     nameIndex: index("name_idx").on(example.name),
   })
 );
+export const imagesRelations = relations(images, ({one}) => ({
+  product: one(products, {
+    fields: [images.productId],
+    references: [products.id],
+  }),
+}));

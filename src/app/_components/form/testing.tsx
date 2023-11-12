@@ -34,7 +34,6 @@ export default function Testing() {
       // Throw Error
       return;
     }
-    // console.log(file);
 
     // Call Api
     const { url, fields } = await preSignedMutation.mutateAsync({
@@ -72,8 +71,6 @@ export default function Testing() {
       <form
       onSubmit={ (event) => {
         event.preventDefault();
-        console.log(files.at(0)?.file)
-        console.log(files.at(0))
         files.forEach((value) => void uploadImage(value))
         }}>
         <FilePond

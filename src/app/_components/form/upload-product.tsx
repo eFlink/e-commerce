@@ -1,32 +1,101 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { ReactElement, ReactHTML, useState } from "react";
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
+
+
+// Import React FilePond
+import { FilePond, registerPlugin } from "react-filepond";
+import { type FilePondFile } from "filepond";
+
+// Import FilePond styles
+import "filepond/dist/filepond.min.css";
+
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+
+// Register the plugins
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 
 import { api } from "~/trpc/react";
 
 export function UploadProduct() {
   const router = useRouter();
+
+  // Inputs
   const [name, setName] = useState("");
   const [description, setDesc] = useState("");
+  const [files, setFiles] = useState<FilePondFile[]>([]);
 
+  const handleSubmit = async () => {
+    // Upload the images first
+    const product = await uploadProduct.mutateAsync({
+      name, 
+      description,
+    });
 
-  const uploadProduct = api.product.add.useMutation({
-    onSuccess: () => {
-      router.refresh();
-      setName("");
-      setDesc("");
-    },
-  });
+    files.map( async (filePond) => {
+      return await uploadImage(filePond, product!.id);
+    });
+
+    setName("");
+    setDesc("");
+    setFiles([]);
+    router.replace("/admin");
+  }
+
+  const uploadImage = async (filePond: FilePondFile, productId: number) => {
+    const file = filePond.file; // Transform to ActualFileObject that is functionally the same as File
+    if (!file) {
+      return;
+    }
+
+    const { url, fields, imageId } = await preSignedMutation.mutateAsync({
+      fileName: file.name,
+      fileType: file.type,
+      productId: productId
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data: Record<string, any> = {
+      ...fields,
+      "Content-Type": file.type,
+      file,
+    };
+
+    const formData = new FormData();
+    for (const name in data) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      formData.append(name, data[name]);
+    }
+
+    // Post Image to S3
+    const upload = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (upload.ok) {
+      console.log("success");
+      return imageId;
+    } else {
+      console.log("unsuccessful");
+      return null;
+    }
+  };
+
+  const uploadProduct = api.product.add.useMutation();
+  const preSignedMutation = api.image.getPreSignedUrl.useMutation();
 
   return (
     <>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          uploadProduct.mutate({ name, description });
+          void handleSubmit();
         }}
         className="flex flex-col gap-2"
       >
@@ -96,25 +165,14 @@ export function UploadProduct() {
                   Photos
                 </label>
                 <div className="mt-2 sm:col-span-2 sm:mt-0">
-                  <div className="flex max-w-2xl justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                    <div className="text-center">
-                      <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
-                      <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                        <label
-                          htmlFor="file-upload"
-                          className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                        >
-                          <span>Upload a file</span>
-
-                          <input 
-                          id="file-upload" name="file-upload" type="file" className="sr-only"                          />
-
-                        </label>
-                        <p className="pl-1">or drag and drop</p>
-                      </div>
-                      <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                    </div>
-                  </div>
+                  {/* Add Image Dropper here */}
+                <FilePond
+                  onupdatefiles={setFiles}
+                  allowMultiple={true}
+                  maxFiles={3}
+                  name="files" /* sets the file input name, it's filepond by default */
+                  labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                />
                 </div>
               </div>
             </div>
