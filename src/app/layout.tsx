@@ -5,8 +5,6 @@ import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { ClerkProvider } from "@clerk/nextjs";
-import Header from "./_components/ui/header";
-import Footer from "./_components/ui/footer";
 
 const inter = Inter({
   subsets: ["latin"],
