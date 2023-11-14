@@ -1,19 +1,20 @@
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { adminProcedure, createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { products } from "~/server/db/schema";
+import { images, products, productsRelations } from "~/server/db/schema";
 
 export const productRouter = createTRPCRouter({
-    getLatest: publicProcedure.query(({ ctx }) => {
+    getLatest: publicProcedure.query( async ({ ctx }) => {
         return ctx.db.query.products.findMany({
-            limit: 5,
+            limit: 4,
         });
     }),
 
     add:adminProcedure 
     .input(z.object({ 
         name: z.string().min(1),
-        description: z.string().min(1)
+        description: z.string().min(1),
+
     }))
     .mutation(async ({ ctx, input}) => {
         await ctx.db.insert(products).values({

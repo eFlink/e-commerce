@@ -26,7 +26,6 @@ export const products = mysqlTable(
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
     name: varchar("name", { length: 256 }).notNull(),
     description: varchar("description", { length: 256 }).notNull(),
-    // image_url: varchar("image_url", { length: 256 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -45,11 +44,10 @@ export const images = mysqlTable(
   "image",
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    // product_id: bigint("product_id", { mode: "number" }).notNull(),
     name: varchar("name", { length: 256 }).notNull(),
     alt_text: varchar("alt_text", { length: 256 }),
-    productId: bigint("productId", {mode: "number"}).notNull(),
-    imageUrl: varchar("imageUrl", { length: 256 }).notNull(),
+    product_id: bigint("productId", {mode: "number"}).notNull(),
+    image_url: varchar("imageUrl", { length: 256 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -61,7 +59,7 @@ export const images = mysqlTable(
 );
 export const imagesRelations = relations(images, ({one}) => ({
   product: one(products, {
-    fields: [images.productId],
+    fields: [images.product_id],
     references: [products.id],
   }),
 }));

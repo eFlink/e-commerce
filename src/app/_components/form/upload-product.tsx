@@ -28,7 +28,7 @@ export function UploadProduct() {
   // Inputs
   const [name, setName] = useState("");
   const [description, setDesc] = useState("");
-  const [files, setFiles] = useState<FilePondFile[]>([]);
+  const [images, setImages] = useState<FilePondFile[]>([]);
 
   const handleSubmit = async () => {
     // Upload the images first
@@ -37,13 +37,14 @@ export function UploadProduct() {
       description,
     });
 
-    files.map( async (filePond) => {
-      return await uploadImage(filePond, product!.id);
+    // Get the URLs
+    images.map( async (filePond) => {
+      const imageKey = await uploadImage(filePond, product!.id);
     });
 
     setName("");
     setDesc("");
-    setFiles([]);
+    setImages([]);
     router.replace("/admin");
   }
 
@@ -53,10 +54,9 @@ export function UploadProduct() {
       return;
     }
 
-    const { url, fields, imageId } = await preSignedMutation.mutateAsync({
+    const { url, fields, imageKey } = await preSignedMutation.mutateAsync({
       fileName: file.name,
       fileType: file.type,
-      productId: productId
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -80,7 +80,7 @@ export function UploadProduct() {
 
     if (upload.ok) {
       console.log("success");
-      return imageId;
+      return imageKey;
     } else {
       console.log("unsuccessful");
       return null;
@@ -88,7 +88,7 @@ export function UploadProduct() {
   };
 
   const uploadProduct = api.product.add.useMutation();
-  const preSignedMutation = api.image.getPreSignedUrl.useMutation();
+  const preSignedMutation = api.image.getPreSignedPost.useMutation();
 
   return (
     <>
@@ -167,11 +167,12 @@ export function UploadProduct() {
                 <div className="mt-2 sm:col-span-2 sm:mt-0">
                   {/* Add Image Dropper here */}
                 <FilePond
-                  onupdatefiles={setFiles}
+                  onupdatefiles={setImages}
                   allowMultiple={true}
                   maxFiles={3}
-                  name="files" /* sets the file input name, it's filepond by default */
-                  labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                  name="images" /* sets the file input name, it's filepond by default */
+                  labelIdle='Drag & Drop your images or <span class="filepond--label-action">Browse</span>'
+                  allowReorder={true}
                 />
                 </div>
               </div>
