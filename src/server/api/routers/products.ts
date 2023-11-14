@@ -1,15 +1,16 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 import { adminProcedure, createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { images, products, productsRelations } from "~/server/db/schema";
 
 export const productRouter = createTRPCRouter({
-    getLatest: publicProcedure.query( async ({ ctx }) => {
-        return ctx.db.query.products.findMany({
-            limit: 4,
-        });
+    getLatestWithImages: publicProcedure.query( async ({ ctx }) => {
+        const table = ctx.db.select().from(products).innerJoin(images, and(
+            eq(products.id, images.product_id),
+            eq(images.main_photo, true)
+        )).limit(4);
+        return table;
     }),
-
     add:adminProcedure 
     .input(z.object({ 
         name: z.string().min(1),

@@ -12,13 +12,23 @@ export default async function Home() {
     <>
       <Header />
       <Hero />
+      <LatestProducts />
       <Footer />
     </>
   );
 }
 
 async function LatestProducts() {
-  const products = await api.product.getLatest.query();
+  const products = await api.product.getLatestWithImages.query();
+  const urls = Array<string>();
+  const imageUrls = new Map<number, string>();
+  for (const product of products) {
+    const { url } = await api.image.getPresignedUrl.query({
+      key: product.image.image_url,
+    })
+    imageUrls.set(product.product.id, url);
+  }
+
   return (
     <section aria-labelledby="trending-heading">
       <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:pt-32">
@@ -33,25 +43,25 @@ async function LatestProducts() {
         </div>
 
         <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-0 lg:gap-x-8">
-          {/* {trendingProducts.map((product) => (
-            <div key={product.id} className="group relative">
+          {products.map((product) => (
+            <div key={product.product.id} className="group relative">
               <div className="h-56 w-full overflow-hidden rounded-md group-hover:opacity-75 lg:h-72 xl:h-80">
                 <img
-                  src={product.imageSrc}
-                  alt={product.imageAlt}
+                  src={imageUrls.get(product.product.id)}
+                  // alt={product.imageAlt}
                   className="h-full w-full object-cover object-center"
                 />
               </div>
               <h3 className="mt-4 text-sm text-gray-700">
-                <a href={product.href}>
+                <a href='#'>
                   <span className="absolute inset-0" />
-                  {product.name}
+                  {product.product.name}
                 </a>
               </h3>
-              <p className="mt-1 text-sm text-gray-500">{product.color}</p>
-              <p className="mt-1 text-sm font-medium text-gray-900">{product.price}</p>
+              {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+              <p className="mt-1 text-sm font-medium text-gray-900">{product.price}</p> */}
             </div>
-          ))} */}
+          ))}
         </div>
 
         <div className="mt-8 text-sm md:hidden">
