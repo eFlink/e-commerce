@@ -37,10 +37,27 @@ export function UploadProduct() {
       description,
     });
 
-    // Get the URLs
-    images.map( async (filePond) => {
-      const imageKey = await uploadImage(filePond, product!.id);
+    if (product?.id === undefined) {
+      return;
+    }
+
+    if (images.length < 1) {
+      return;
+    }
+
+    images.map((filepond) => {
+      if (filepond.fileSize > 1048576) {
+        // Throw new error
+        return;
+      }
     });
+
+    let mainPhoto = true;
+    for (const filePond of images) {
+        await uploadImage(filePond, product.id, mainPhoto);
+        mainPhoto = false;
+    }
+
 
     setName("");
     setDesc("");
@@ -48,15 +65,17 @@ export function UploadProduct() {
     router.replace("/admin");
   }
 
-  const uploadImage = async (filePond: FilePondFile, productId: number) => {
+  const uploadImage = async (filePond: FilePondFile, productId: number, mainPhoto: boolean) => {
     const file = filePond.file; // Transform to ActualFileObject that is functionally the same as File
     if (!file) {
       return;
     }
 
-    const { url, fields, imageKey } = await preSignedMutation.mutateAsync({
+    const { url, fields } = await preSignedMutation.mutateAsync({
       fileName: file.name,
       fileType: file.type,
+      productId: productId,
+      mainPhoto: mainPhoto,
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -80,10 +99,8 @@ export function UploadProduct() {
 
     if (upload.ok) {
       console.log("success");
-      return imageKey;
     } else {
       console.log("unsuccessful");
-      return null;
     }
   };
 
@@ -163,6 +180,7 @@ export function UploadProduct() {
               <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                 <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">
                   Photos
+                  <div className="opacity-50">Put your Main Image at the top</div>
                 </label>
                 <div className="mt-2 sm:col-span-2 sm:mt-0">
                   {/* Add Image Dropper here */}

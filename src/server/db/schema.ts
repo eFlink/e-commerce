@@ -4,6 +4,7 @@
 import { sql } from "drizzle-orm";
 import {
   bigint,
+  boolean,
   index,
   mysqlTableCreator,
   timestamp,
@@ -47,6 +48,7 @@ export const images = mysqlTable(
     name: varchar("name", { length: 256 }).notNull(),
     alt_text: varchar("alt_text", { length: 256 }),
     product_id: bigint("productId", {mode: "number"}).notNull(),
+    main_photo: boolean("main_photo").notNull(),
     image_url: varchar("imageUrl", { length: 256 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)

@@ -17,10 +17,13 @@ export const imageRouter = createTRPCRouter({
     .input(z.object({
             fileName: z.string().min(1),
             fileType: z.string().min(1),
+            productId: z.number().min(1),
+            mainPhoto: z.boolean(),
     }))
     .mutation( async ({ ctx, input }) => {
         // Add image to product images
         const imageKey = randomUUID();
+        // Should Catch error
         const {url, fields } = await createPresignedPost(s3, {
             Bucket: process.env.S3_BUCKET_NAME!,
             Key: imageKey,
@@ -32,8 +35,19 @@ export const imageRouter = createTRPCRouter({
                 ["starts-with", "$Content-Type", "image/"],
                 ['content-length-range', 0, 1048576], // up to 1 MB
             ],
+        })
+        const newMedia = await ctx.db.insert(images).values({
+            name: input.fileName,
+            product_id: input.productId,
+            image_url: imageKey,
+            main_photo: input.mainPhoto,
         });
-        return {url, fields, imageKey};
+        if (!newMedia) {
+            throw new TRPCError({
+                code: "INTERNAL_SERVER_ERROR",
+            })
+        }
+        return {url, fields };
     }),
     getPresignedUrl: publicProcedure
     .input(z.object({
@@ -49,23 +63,4 @@ export const imageRouter = createTRPCRouter({
         });
         return {url};
     }),
-    addImage: adminProcedure
-    .input(z.object({
-        fileName: z.string().min(1),
-        productId: z.number().min(1),
-        imageKey: z.string().min(1),
-    }))
-    .mutation( async ({ ctx, input}) => {
-        const newMedia = await ctx.db.insert(images).values({
-            name: input.fileName,
-            product_id: input.productId,
-            image_url: input.imageKey,
-        });
-        if (!newMedia) {
-            throw new TRPCError({
-                code: "INTERNAL_SERVER_ERROR",
-            })
-        }
-        return newMedia;
-    })
 });
