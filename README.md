@@ -26,7 +26,7 @@ npm install -g pnpm
 # Installation
 Clone the repository:
 ```
-git clone eFlink/dohfigure
+git clone https://github.com/eFlink/dohfigure.git
 ```
 Navigate to the project directory:
 ```
