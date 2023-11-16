@@ -1,28 +1,47 @@
-# Create T3 App
+# Dohfigure E-commerce Website
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Welcome to the repository of Dohfigure, an e-commerce platform built with cutting-edge web technologies. This project integrates a variety of tools and frameworks, including React, Next.js, Drizzle, Vercel, Clerk, tRPC, Tailwind CSS, TypeScript, and more. 
 
-## What's next? How do I make an app with this?
+## Technologies
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+This project is built using several modern web technologies:
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- React: A JavaScript library for building user interfaces.
+- Next.js: A React framework that enables functionality such as server-side rendering and generating static websites.
+- Drizzle: A collection of front-end libraries that make writing dApp frontends easier and more predictable.
+- Vercel: A platform for frontend frameworks and static sites, built to integrate with your headless content, commerce, or database.
+- Clerk: A complete user management solution, providing authentication, authorization, and user management.
+- tRPC: End-to-end typesafe APIs made easy.
+- Tailwind CSS: A utility-first CSS framework for rapidly building custom designs.
+- TypeScript: A strongly typed programming language that builds on JavaScript, giving you better tooling at any scale.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+Future integrations may include Stripe for payment processing capabilities.
 
-## Learn More
+## Getting Started
+Prerequisites
+Ensure you have pnpm installed on your system. If not, you can install it using the following command:
+```
+npm install -g pnpm
+```
+# Installation
+Clone the repository:
+```
+git clone https://github.com/eFlink/dohfigure.git
+```
+Navigate to the project directory:
+```
+cd dohfigure
+```
+Install dependencies:
+```
+pnpm install
+```
+Run the development server:
+```
+pnpm dev
+```
+The application should now be running on http://localhost:3000.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Contributing
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+I still have a lot to learn so feedback is greatly appreciated :)
