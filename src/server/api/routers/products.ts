@@ -1,7 +1,7 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { adminProcedure, createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { images, products, productsRelations } from "~/server/db/schema";
+import { images, products } from "~/server/db/schema";
 
 export const productRouter = createTRPCRouter({
     getLatestWithImages: publicProcedure.query( async ({ ctx }) => {
@@ -25,4 +25,14 @@ export const productRouter = createTRPCRouter({
         const product = await ctx.db.select().from(products).where(eq(products.name, input.name));
         return product.at(0);
     }),
+    getById: publicProcedure
+    .input(z.object({
+        productId: z.string().min(1),
+    }))
+    .query( async ({ctx, input}) => {
+        const id = parseInt(input.productId);
+        const query = sql`SELECT ${products.id} FROM ${products} JOIN ${images} ON ${products}.id = ${images}.product_id LIMIT 1`;
+        return await ctx.db.execute(query);
+
+    })
 });

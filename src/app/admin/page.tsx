@@ -1,11 +1,9 @@
 import { redirect } from "next/navigation";
 // import { UploadProduct } from "../_components/form/upload-product";
 import { api } from "~/trpc/server";
-import MediaUploader from "../_components/form/upload-image";
-import Testing from "../_components/form/testing";
 import { UploadProduct } from "../_components/form/upload-product";
 
-export default async function Home() {
+export default async function Page() {
     // Product Uploading
     // Name, Description, Brand, Price
     const isAdmin = await api.user.isAdmin.query();
@@ -15,9 +13,7 @@ export default async function Home() {
 
     return (
         <div>
-            {/* <MediaUploader/> */}
             <UploadProduct/>
-            {/* <Testing/> */}
         </div>
     )
 }

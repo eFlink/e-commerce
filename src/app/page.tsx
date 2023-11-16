@@ -3,9 +3,10 @@ import { UploadProduct } from "./_components/form/upload-product";
 import Hero from "./hero";
 import Header from "./_components/ui/header";
 import Footer from "./_components/ui/footer";
+import Link from "next/link";
 
 
-export default async function Home() {
+export default function Page() {
   // Add server function
 
   return (
@@ -53,10 +54,10 @@ async function LatestProducts() {
                 />
               </div>
               <h3 className="mt-4 text-sm text-gray-700">
-                <a href='#'>
+                <Link href={`/product/${product.product.id}`}>
                   <span className="absolute inset-0" />
                   {product.product.name}
-                </a>
+                </Link>
               </h3>
               {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p>
               <p className="mt-1 text-sm font-medium text-gray-900">{product.price}</p> */}
