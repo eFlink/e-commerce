@@ -97,8 +97,10 @@ function classNames(...classes: string[]) {
 }
 
 export default function ProductOverview({productId} : {productId: string}) {
-  const prod = api.product.getById.useQuery({productId});
-  console.log(prod);
+  const { data }= api.product.getProductPage.useQuery({productId});
+  console.log(data?.url)
+  
+
   return (
     <div className="bg-white">
       <div className="mx-auto px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -107,7 +109,7 @@ export default function ProductOverview({productId} : {productId: string}) {
           {/* Product image */}
           <div className="lg:col-span-4 lg:row-end-1">
             <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-lg bg-gray-100">
-              <img src={product.imageSrc} alt={product.imageAlt} className="object-cover object-center" />
+              <img src={data?.url} alt={product.imageAlt} className="object-cover object-center" />
             </div>
           </div>
 
@@ -115,7 +117,7 @@ export default function ProductOverview({productId} : {productId: string}) {
           <div className="mx-auto mt-14 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none">
             <div className="flex flex-col-reverse">
               <div className="mt-4">
-                <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{product.name}</h1>
+                <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{data?.product?.name}</h1>
 
                 <h2 id="information-heading" className="sr-only">
                   Product information
