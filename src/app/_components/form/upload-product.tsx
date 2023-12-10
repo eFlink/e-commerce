@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { ReactElement, ReactHTML, useState } from "react";
-import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
+import React, { useState } from "react";
+import { UserCircleIcon } from '@heroicons/react/24/solid'
 
 
 // Import React FilePond

@@ -4,6 +4,7 @@ import Hero from "./hero";
 import Header from "./_components/ui/header";
 import Footer from "./_components/ui/footer";
 import Link from "next/link";
+import Image from "next/image";
 
 
 export default function Page() {
@@ -47,9 +48,9 @@ async function LatestProducts() {
           {products.map((product) => (
             <div key={product.product.id} className="group relative">
               <div className="h-56 w-full overflow-hidden rounded-md group-hover:opacity-75 lg:h-72 xl:h-80">
-                <img
-                  src={imageUrls.get(product.product.id)}
-                  // alt={product.imageAlt}
+                <Image
+                  src={imageUrls.get(product.product.id)!}
+                  alt={""}
                   className="h-full w-full object-cover object-center"
                 />
               </div>

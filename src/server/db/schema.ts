@@ -47,7 +47,7 @@ export const images = mysqlTable(
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
     name: varchar("name", { length: 256 }).notNull(),
     alt_text: varchar("alt_text", { length: 256 }),
-    product_id: bigint("productId", {mode: "number"}).notNull(),
+    product_id: bigint("product_id", {mode: "number"}).notNull(),
     main_photo: boolean("main_photo").notNull(),
     image_url: varchar("imageUrl", { length: 256 }).notNull(),
     createdAt: timestamp("created_at")
@@ -65,3 +65,11 @@ export const imagesRelations = relations(images, ({one}) => ({
     references: [products.id],
   }),
 }));
+
+export const addresses = mysqlTable(
+  "address",
+  {
+    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+    easy_post_id: varchar("easy_post_id", { length: 256 }).notNull(),
+  }
+);
