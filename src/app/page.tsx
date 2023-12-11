@@ -51,6 +51,9 @@ async function LatestProducts() {
                 <Image
                   src={imageUrls.get(product.product.id)!}
                   alt={""}
+                  width={500}
+                  height={500}
+                  priority={true}
                   className="h-full w-full object-cover object-center"
                 />
               </div>

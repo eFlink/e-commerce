@@ -4,6 +4,7 @@ import { Fragment } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { Tab } from '@headlessui/react'
 import { api } from '~/trpc/react'
+import Image from 'next/image'
 
 const product = {
   name: 'Application UI Icon Pack',
@@ -98,8 +99,6 @@ function classNames(...classes: string[]) {
 
 export default function ProductOverview({productId} : {productId: string}) {
   const { data }= api.product.getProductPage.useQuery({productId});
-  console.log(data?.url)
-  
 
   return (
     <div className="bg-white">
@@ -109,7 +108,7 @@ export default function ProductOverview({productId} : {productId: string}) {
           {/* Product image */}
           <div className="lg:col-span-4 lg:row-end-1">
             <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-lg bg-gray-100">
-              <img src={data?.url} alt={product.imageAlt} className="object-cover object-center" />
+              {data?.url ? <Image src={data?.url} alt={product.imageAlt} width={500} height={500} priority={true} className="object-cover object-center" /> : null}
             </div>
           </div>
 
