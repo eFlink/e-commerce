@@ -1,6 +1,6 @@
-# Dohfigure E-commerce Website
+# E-commerce Website
 
-Welcome to the repository of Dohfigure, an e-commerce platform built with cutting-edge web technologies. This project integrates a variety of tools and frameworks, including React, Next.js, Drizzle, Vercel, Clerk, tRPC, Tailwind CSS, TypeScript, and more. 
+Welcome to the repository of my custom e-commerce website platform built with cutting-edge web technologies. This project integrates a variety of tools and frameworks, including React, Next.js, Drizzle, Vercel, Clerk, tRPC, Tailwind CSS, TypeScript, and more. 
 
 ## Technologies
 
@@ -26,7 +26,7 @@ npm install -g pnpm
 # Installation
 Clone the repository:
 ```
-git clone https://github.com/eFlink/dohfigure.git
+git clone https://github.com/eFlink/e-commerce.git
 ```
 Navigate to the project directory:
 ```
